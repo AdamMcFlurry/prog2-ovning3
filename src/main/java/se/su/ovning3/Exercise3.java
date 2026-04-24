@@ -23,20 +23,20 @@ public class Exercise3 {
 	public void exportRecordings(String fileName) {
 		try{
 			FileWriter fileWriter = new FileWriter(fileName);
-			PrintWriter printWriter = new PrintWriter(fileWriter);
-			printWriter.println("<recording>");
+			PrintWriter pw = new PrintWriter(fileWriter);
 			for (Recording record : recordings) {
-				printWriter.println(getWithAngleBracketLabel("artist", record.getArtist()));
-				printWriter.println(getWithAngleBracketLabel("title", record.getTitle()));
-				printWriter.println(getWithAngleBracketLabel("year", record.getYear()));
-				printWriter.println("<genres>");
+				pw.println("<recording>");
+				pw.println(getWithAngleBracketLabel("artist", record.getArtist()));
+				pw.println(getWithAngleBracketLabel("title", record.getTitle()));
+				pw.println(getWithAngleBracketLabel("year", String.valueOf(record.getYear())));
+				pw.println("<genres>");
 				for (String genre : record.getGenre()) {
-					printWriter.println(getWithAngleBracketLabel("genre", genre));
+					pw.println(getWithAngleBracketLabel("genre", genre));
 				}
-				printWriter.println("</genres>");
+				pw.println("</genres>");
+				pw.println("</recording>");
 			}
-			printWriter.println("</recording>");
-			printWriter.close();
+			pw.close();
  			fileWriter.close();
 		} catch (FileNotFoundException e) {
 			System.out.printf("%s not found%n", fileName);
@@ -45,8 +45,8 @@ public class Exercise3 {
 		}
 	}
 
-	// Questionable...
-	private String getWithAngleBracketLabel(String text, Object innerText) {
+	// Questionable use of Object
+	private String getWithAngleBracketLabel(String text, String innerText) {
 		StringBuilder sb = new StringBuilder();
 		sb.append("<").append(text).append(">");
 		sb.append(innerText);
@@ -61,15 +61,15 @@ public class Exercise3 {
 			int amount = Integer.parseInt(reader.readLine());
 			for (int i = 0; i < amount; i++) {
 				String dataRow = reader.readLine();
-				String[] artistTitleYear = dataRow.split(";");
-
-				Set<String> genres = new HashSet<>();
+				String[] arTiYe = dataRow.split(";");
+				
 				int amountGenres = Integer.parseInt(reader.readLine());
+				Set<String> genres = new HashSet<>();
 				for (int y = 0; y < amountGenres; y++) {
 					String genre = reader.readLine();
 					genres.add(genre);
 				}
-				Recording newRecording = new Recording(artistTitleYear[1], artistTitleYear[0], Integer.parseInt(artistTitleYear[2]), genres);
+				Recording newRecording = new Recording(arTiYe[1], arTiYe[0], Integer.parseInt(arTiYe[2]), genres);
 				recordings.add(newRecording);
 			}
 			fileReader.close();
@@ -84,21 +84,26 @@ public class Exercise3 {
 	public Map<Integer, Double> importSales(String fileName) {
 		Map<Integer, Double> salesHashMap = new HashMap<>();
 		try {
-			DataInputStream dis = new DataInputStream(new FileInputStream(fileName));
+			FileInputStream fis = new FileInputStream(fileName);
+			DataInputStream dis = new DataInputStream(fis);
 			int antal = dis.readInt();
 			for (int i = 0; i < antal; i++) {
 				int year = dis.readInt();
 				int month = dis.readInt();
-				dis.readInt();
+				dis.readInt(); //dis.skipBytes(Integer.BYTES);
 				double value = dis.readDouble();
-				boolean valueExistsInMap = salesHashMap.get(year*100+month) != null;
-				if (valueExistsInMap) {
-					double total = salesHashMap.get(year*100+month) + value;
-					salesHashMap.put(year*100+month, total);
-				} else {
-					salesHashMap.put(year*100+month, value);
+				
+				int key = year*100+month;
+				if (salesHashMap.containsKey(key)) {
+					value+=salesHashMap.get(key);
+				// 	double total = salesHashMap.get(year*100+month) + value;
+				// 	salesHashMap.put(year*100+month, total);
+				// } else {
+				// 	salesHashMap.put(year*100+month, value);
 				}
+				salesHashMap.put(key, value);
 			}
+			fis.close();
 			dis.close();
 		} catch (FileNotFoundException e) {
 			System.out.printf("%s not found%n", fileName);
