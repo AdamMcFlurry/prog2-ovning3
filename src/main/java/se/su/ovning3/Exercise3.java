@@ -58,22 +58,22 @@ public class Exercise3 {
 		try {
 			FileReader fileReader = new FileReader(fileName);
 			BufferedReader reader = new BufferedReader(fileReader);
-		int amount = reader.read();
-		for (int i = 0; i < amount; i++) {
-			String line1 = reader.readLine();
-			String[] artistTitleYear = line1.split(";");
-			
-			Set<String> genres = new HashSet<>();
-			int amountGenres = reader.read();
-			for (int y = 0; y < amountGenres; y++) {
-				String genre = reader.readLine();
-				genres.add(genre);
+			int amount = Integer.parseInt(reader.readLine());
+			for (int i = 0; i < amount; i++) {
+				String dataRow = reader.readLine();
+				String[] artistTitleYear = dataRow.split(";");
+
+				Set<String> genres = new HashSet<>();
+				int amountGenres = Integer.parseInt(reader.readLine());
+				for (int y = 0; y < amountGenres; y++) {
+					String genre = reader.readLine();
+					genres.add(genre);
+				}
+				Recording newRecording = new Recording(artistTitleYear[1], artistTitleYear[0], Integer.parseInt(artistTitleYear[2]), genres);
+				recordings.add(newRecording);
 			}
-			Recording newRecording = new Recording(artistTitleYear[1], artistTitleYear[0], Integer.parseInt(artistTitleYear[2]), genres);
-			recordings.add(newRecording);
-		}
-		fileReader.close();
-		reader.close();
+			fileReader.close();
+			reader.close();
 		} catch (FileNotFoundException e) {
 			System.out.printf("%s not found%n", fileName);
 		} catch (IOException e) {
@@ -99,6 +99,7 @@ public class Exercise3 {
 					salesHashMap.put(year*100+month, value);
 				}
 			}
+			dis.close();
 		} catch (FileNotFoundException e) {
 			System.out.printf("%s not found%n", fileName);
 		} catch (IOException e) {
