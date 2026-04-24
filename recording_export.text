@@ -9,9 +9,9 @@
 <title>Boys Don't Cry</title>
 <year>1979</year>
 <genres>
-<genre>Post-Punk</genre>
-<genre>Rock</genre>
 <genre>New Wave</genre>
+<genre>Rock</genre>
+<genre>Post-Punk</genre>
 </genres>
 <artist>John Coltrane</artist>
 <title>Giant Steps</title>
@@ -29,11 +29,11 @@
 <title>White Blood Cells</title>
 <year>2001</year>
 <genres>
-<genre>Indie Rock</genre>
-<genre>Blues Rock</genre>
-<genre>Alternative Rock</genre>
-<genre>Garage Rock</genre>
 <genre>Rock</genre>
+<genre>Garage Rock</genre>
+<genre>Alternative Rock</genre>
+<genre>Blues Rock</genre>
+<genre>Indie Rock</genre>
 </genres>
 <artist>Tom Misch & Yussef Dayes</artist>
 <title>What Kinda Music</title>
